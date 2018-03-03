@@ -1,3 +1,5 @@
 dashboards:
 - id: 76dff990-5d56-11e7-a89d-4107831e307e
   file: 76dff990-5d56-11e7-a89d-4107831e307e.json
+- id: Filebeat-elasticsearch-gc-log-Dashboard
+  file: Filebeat-elasticsearch-gc-log.json
