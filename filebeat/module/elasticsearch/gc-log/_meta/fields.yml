@@ -1,3 +1,131 @@
-- name: phase
-  description: Please add description
-  example: Please add example
+- name: gc-log
+  description: Contains fields from the Elasticsearch garbage collection logs.
+  type: group
+  fields:
+    - name: cms
+      description: Details for concurrent mark sweep garbage collection
+      type: group
+      fields:
+        - name: mark_phase
+          description: Concurrent mark sweep mark phase fields
+          type: group
+          fields:
+            - name: name
+              description: Concurrent mark sweep mark phase name
+              type: keyword
+            - name: old_gen_occupancy_kb
+              description: Concurrent mark sweep mark phase old generation occupancy kilobytes
+              type: integer
+            - name: old_gen_size_kb
+              description: Concurrent mark sweep mark phase old generation size kilobytes
+              type: integer
+            - name: heap_occupancy_kb
+              description: Concurrent mark sweep mark phase heap occupancy kilobytes
+              type: integer
+            - name: heap_size_kb
+              description: Concurrent mark sweep mark phase heap size kilobytes
+              type: integer
+            - name: pause_time_secs
+              description: Concurrent mark sweep mark phase pause time seconds
+              type: integer
+        - name: phase
+          description: Concurrent mark sweep garabage collection mark phase
+          type: keyword
+        - name: elapsed_secs
+          description: Concurrent mark sweep elapsed time seconds
+          type: integer
+        - name: clock_secs
+          description: Concurrent mark sweep clock time seconds
+          type: integer
+        - name: young_gen_occupancy_before_remark_kb
+          description: Concurrent mark sweep young generation occupancy before remark kilobytes
+          type: integer
+        - name: young_gen_total_kb
+          description: Concurrent mark sweep total young generation kilobytes
+          type: integer
+        - name: relative_process_time_at_rescan_secs
+          description: Concurrent mark sweep relative process time at rescan seconds
+          type: integer
+        - name: parallel_rescan_took_time_secs
+          description: Concurrent mark sweep parallel rescan took time seconds
+          type: integer
+        - name: relative_process_time_at_weak_refs_processing_secs
+          description: Concurrent mark sweep relative process time at weak references processing seconds
+          type: integer
+        - name: weak_refs_processing_took_time_secs
+          description: Concurrent mark sweep weak references processing took time seconds
+          type: integer
+        - name: relative_process_time_at_class_unloading_secs
+          description: Concurrent mark sweep relative process time at class unloading seconds
+          type: integer
+        - name: class_unload_took_time_secs
+          description: Concurrent mark sweep class unloading took time seconds
+          type: integer
+        - name: relative_process_time_at_scrub_symbol_table_secs
+          description: Concurrent mark sweep relative process time at scrub symbol table seconds
+          type: integer
+        - name: scrub_symbol_table_took_time_secs
+          description: Concurrent mark sweep scrub symbol table took time seconds
+          type: integer
+        - name: relative_process_time_at_scrub_string_table_secs
+          description: Concurrent mark sweep process time at scrub string table seconds
+          type: integer
+        - name: scrub_string_table_took_time_secs
+          description: Concurrent mark sweep scrub string table took time seconds
+          type: integer
+        - name: desired_survivor_size_bytes
+          description: Concurrent mark sweep desired survivor size bytes
+          type: integer
+        - name: new_threshold
+          description: Concurrent mark sweep new threshold
+          type: integer
+        - name: new_threshold_max
+          description: Concurrent mark sweep new threshold max
+          type: integer
+        - name: age
+          description: Concurrent mark sweep age
+          type: integer
+        - name: young_before_kilobytes
+          description: Concurrent mark sweep young generation before kilobytes
+          type: integer
+        - name: young_after_kilobytes
+          description: Concurrent mark sweep young generation after kilobytes
+          type: integer
+        - name: young_space_kilobytes
+          description: Concurrent mark sweep young space kilobytes
+          type: integer
+        - name: time_spent_secs
+          description: Concurrent mark sweep time spent seconds
+          type: integer
+        - name: heap_before_kilobytes
+          description: Concurrent mark sweep heap size before collection kilobytes
+          type: integer
+        - name: heap_after_kilobytes
+          description: Concurrent mark sweep heap size after collection kilobytes
+          type: integer
+        - name: heap_size_kilobytes
+          description: Concurrent mark sweep heap size kilobytes
+          type: integer
+        - name: time_spent_heap_secs
+          description: Concurrent mark sweep time spent collecting heap seconds
+          type: integer
+    - name: times
+      description: Garbage collection times
+      type: group
+      fields:
+        - name: user_secs
+          description: User time seconds
+          type: integer
+        - name: sys_secs
+          description: System time seconds
+          type: integer
+        - name: real_secs
+          description: Real time seconds
+          type: integer
+    - name: threads_total_stop_time_secs
+      description: Total thread stop time seconds
+      type: integer
+    - name: stopping_threads_time_secs
+      description: Time took to stop threads seconds
+      type: integer
+
