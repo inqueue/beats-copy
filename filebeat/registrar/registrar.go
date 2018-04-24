@@ -16,11 +16,12 @@ import (
 )
 
 type Registrar struct {
-	Channel      chan []file.State
-	out          successLogger
-	done         chan struct{}
-	registryFile string // Path to the Registry File
-	wg           sync.WaitGroup
+	Channel                 chan []file.State
+	out                     successLogger
+	done                    chan struct{}
+	registryFile            string      // Path to the Registry File
+	registryFilePermissions os.FileMode // Permissions to apply on the Registry File
+	wg                      sync.WaitGroup
 
 	states               *file.States // Map with all file paths inside and the corresponding state
 	gcRequired           bool         // gcRequired is set if registry state needs to be gc'ed before the next write
@@ -40,9 +41,10 @@ var (
 	registryWrites = monitoring.NewInt(nil, "registrar.writes")
 )
 
-func New(registryFile string, flushTimeout time.Duration, out successLogger) (*Registrar, error) {
+func New(registryFile string, registryFilePermissions os.FileMode, flushTimeout time.Duration, out successLogger) (*Registrar, error) {
 	r := &Registrar{
-		registryFile: registryFile,
+		registryFile:            registryFile,
+		registryFilePermissions: registryFilePermissions,
 		done:         make(chan struct{}),
 		states:       file.NewStates(),
 		Channel:      make(chan []file.State, 1),
@@ -204,8 +206,10 @@ func (r *Registrar) onEvents(states []file.State) {
 	r.gcRequired = r.gcEnabled
 }
 
-// gcStates runs a registry Cleanup. The bool returned indicates wether more
-// events in the registry can be gc'ed in the future.
+// gcStates runs a registry Cleanup. The method check if more event in the
+// registry can be gc'ed in the future. If no potential removable state is found,
+// the gcEnabled flag is set to false, indicating the current registrar state being
+// stable. New registry update events can re-enable state gc'ing.
 func (r *Registrar) gcStates() {
 	if !r.gcRequired {
 		return
@@ -259,7 +263,7 @@ func (r *Registrar) writeRegistry() error {
 	logp.Debug("registrar", "Write registry file: %s", r.registryFile)
 
 	tempfile := r.registryFile + ".new"
-	f, err := os.OpenFile(tempfile, os.O_RDWR|os.O_CREATE|os.O_TRUNC|os.O_SYNC, 0600)
+	f, err := os.OpenFile(tempfile, os.O_RDWR|os.O_CREATE|os.O_TRUNC|os.O_SYNC, r.registryFilePermissions)
 	if err != nil {
 		logp.Err("Failed to create tempfile (%s) for writing: %s", tempfile, err)
 		return err
